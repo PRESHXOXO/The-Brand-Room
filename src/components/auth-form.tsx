@@ -78,7 +78,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/profile/create`,
+            emailRedirectTo: `${window.location.origin}/feed`,
           },
         });
 
@@ -89,7 +89,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         }
 
         setStatus("success");
-        router.push("/profile/create?new=1");
+        router.push("/feed");
         return;
       }
 
@@ -105,7 +105,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       }
 
       setStatus("success");
-      router.push("/profile/edit");
+      router.push("/feed");
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "";
 

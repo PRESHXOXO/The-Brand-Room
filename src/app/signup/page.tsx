@@ -7,7 +7,7 @@ export default function SignUpPage() {
       eyebrow="TASTE STUDY"
       title="Create your designer account."
       description="Start the account that will hold your public designer profile, profile edits, and future studio activity inside The Brand Room."
-      footnote="After sign up, you will be sent to the profile studio so you can shape how other designers see your work."
+      footnote="After sign up, you will land in the feed. Create your profile before posting so the room can see who made the work."
     >
       <AuthForm mode="signup" />
     </StudioShell>

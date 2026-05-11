@@ -255,7 +255,7 @@ export function ProfileForm({ mode }: ProfileFormProps) {
       }));
       setStatus("success");
       setMessage("Your designer profile is live.");
-      router.push(`/designer/${username}`);
+      router.push("/feed");
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "The profile could not save.";

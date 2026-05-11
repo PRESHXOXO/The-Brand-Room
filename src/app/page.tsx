@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BriefCard } from "@/components/brief-card";
 import { CtaButton } from "@/components/cta-button";
 import { FeatureCard } from "@/components/feature-card";
+import { HomeAuthRedirect } from "@/components/home-auth-redirect";
 import { SectionHeading } from "@/components/section-heading";
 import { WaitlistForm } from "@/components/waitlist-form";
 import { WorkCard } from "@/components/work-card";
@@ -17,6 +18,7 @@ import {
 export default function Home() {
   return (
     <main className="bg-[#f7f0e5] text-[#0d0b08]">
+      <HomeAuthRedirect />
       <section className="brand-hero relative overflow-hidden text-[#f7f0e5]">
         <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-6 lg:px-8">
           <a href="#" className="font-serif text-2xl leading-none text-[#f7f0e5]">
@@ -265,9 +267,6 @@ export default function Home() {
           <div className="flex flex-wrap gap-4 font-semibold text-[#123c2c]">
             <Link href="/feed" className="transition hover:text-[#0d0b08]">
               View feed
-            </Link>
-            <Link href="/post/new" className="transition hover:text-[#0d0b08]">
-              Publish a post
             </Link>
             <Link href="/signup" className="transition hover:text-[#0d0b08]">
               Create designer profile

@@ -30,6 +30,10 @@ type SupabasePostError = {
   code?: string;
 };
 
+type PostFormProps = {
+  onPostCreated?: () => void | Promise<void>;
+};
+
 const maxImageBytes = 10 * 1024 * 1024;
 
 function cleanText(value: string) {
@@ -40,33 +44,33 @@ function getPostErrorMessage(error: SupabasePostError) {
   const message = error.message.toLowerCase();
 
   if (message.includes("bucket") && message.includes("not found")) {
-    return "Supabase cannot find the public post-images bucket. Create it or run the updated schema SQL.";
+    return "We couldn’t post this yet. Try again.";
   }
 
   if (message.includes("row-level security") || message.includes("rls")) {
-    return "Supabase blocked the post save. Run the posts and storage RLS policies, then try again.";
+    return "We couldn’t post this yet. Try again.";
   }
 
   if (message.includes("permission denied")) {
-    return "Supabase needs authenticated permissions for posts and post image uploads. Run the updated SQL setup.";
+    return "We couldn’t post this yet. Try again.";
   }
 
   if (message.includes("relation") && message.includes("does not exist")) {
-    return "Supabase cannot find the posts table yet. Check public.posts or run the updated schema.";
+    return "We couldn’t post this yet. Try again.";
   }
 
   if (message.includes("column") && message.includes("does not exist")) {
-    return "The posts table columns do not match this form yet. Check the public.posts columns in Supabase.";
+    return "We couldn’t post this yet. Try again.";
   }
 
   if (message.includes("duplicate")) {
-    return "That image path already exists. Try publishing again.";
+    return "We couldn’t post this yet. Try again.";
   }
 
-  return "The post could not be published. Check your image and details, then try again.";
+  return "We couldn’t post this yet. Try again.";
 }
 
-export function PostForm() {
+export function PostForm({ onPostCreated }: PostFormProps) {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState<FormStatus>("checking");
   const [message, setMessage] = useState("");
@@ -266,7 +270,6 @@ export function PostForm() {
       const { error: insertError } = await supabase.from("posts").insert({
         user_id: userId,
         image_url: publicUrl,
-        image_path: imagePath,
         caption: cleanCaption,
         category,
         project_stage: projectStage,
@@ -281,15 +284,15 @@ export function PostForm() {
 
       resetForm();
       setStatus("success");
-      setMessage("Your post is live in the feed.");
+      setMessage("Your work is live in The Room.");
+      await onPostCreated?.();
     } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "The post could not be published.";
-
       setStatus("error");
-      setMessage(errorMessage);
+      setMessage(
+        error instanceof Error && error.message.includes("Supabase")
+          ? error.message
+          : "We couldn’t post this yet. Try again.",
+      );
     }
   }
 
@@ -442,16 +445,13 @@ export function PostForm() {
             ? "Opening studio..."
             : isSubmitting
               ? "Publishing..."
-              : "Publish to feed"}
+              : "Post to The Room"}
           <span aria-hidden="true" className="ml-3">
             -&gt;
           </span>
         </button>
 
         <div className="flex flex-wrap gap-4 text-sm font-semibold text-[#123c2c]">
-          <Link href="/feed" className="underline-offset-4 hover:underline">
-            View feed
-          </Link>
           {!profile ? (
             <Link
               href="/profile/create"

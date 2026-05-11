@@ -23,15 +23,33 @@ export function StudioShell({
           <Link href="/" className="font-serif text-2xl leading-none">
             The Brand Room
           </Link>
-          <nav className="flex items-center gap-4 text-sm font-semibold text-[#554b3f]">
+          <nav className="flex flex-wrap items-center gap-3 text-sm font-semibold text-[#554b3f]">
             <Link href="/feed" className="transition hover:text-[#123c2c]">
               Feed
             </Link>
-            <Link href="/post/new" className="transition hover:text-[#123c2c]">
-              Post
+            <Link
+              href="/#weekly-briefs"
+              className="transition hover:text-[#123c2c]"
+            >
+              Weekly Briefs
             </Link>
-            <Link href="/login" className="transition hover:text-[#123c2c]">
-              Log in
+            <Link
+              href="/#critique-room"
+              className="transition hover:text-[#123c2c]"
+            >
+              Critique Room
+            </Link>
+            <Link
+              href="/#featured-work"
+              className="transition hover:text-[#123c2c]"
+            >
+              Featured
+            </Link>
+            <Link
+              href="/profile/edit"
+              className="transition hover:text-[#123c2c]"
+            >
+              Profile
             </Link>
             <Link
               href="/signup"

@@ -165,9 +165,8 @@ end $$;
 
 create table if not exists public.posts (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid references public.profiles(id) on delete cascade,
+  user_id uuid references auth.users(id) on delete cascade,
   image_url text,
-  image_path text,
   caption text,
   category text,
   project_stage text,
@@ -184,9 +183,6 @@ alter table public.posts
 
 alter table public.posts
   add column if not exists image_url text;
-
-alter table public.posts
-  add column if not exists image_path text;
 
 alter table public.posts
   add column if not exists caption text;
@@ -218,6 +214,39 @@ alter table public.posts
 alter table public.posts
   alter column updated_at set default now();
 
+do $$
+declare
+  existing_constraint text;
+begin
+  for existing_constraint in
+    select c.conname
+    from pg_constraint c
+    join pg_class t on t.oid = c.conrelid
+    join pg_namespace n on n.oid = t.relnamespace
+    join unnest(c.conkey) with ordinality as keys(attnum, ord) on true
+    join pg_attribute a on a.attrelid = t.oid and a.attnum = keys.attnum
+    where n.nspname = 'public'
+      and t.relname = 'posts'
+      and c.contype = 'f'
+      and a.attname = 'user_id'
+  loop
+    execute format('alter table public.posts drop constraint if exists %I', existing_constraint);
+  end loop;
+
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'posts_user_id_auth_users_fkey'
+      and conrelid = 'public.posts'::regclass
+  ) then
+    alter table public.posts
+      add constraint posts_user_id_auth_users_fkey
+      foreign key (user_id)
+      references auth.users(id)
+      on delete cascade;
+  end if;
+end $$;
+
 create index if not exists posts_created_at_idx
   on public.posts (created_at desc);
 
@@ -238,7 +267,6 @@ grant select on public.posts to anon, authenticated;
 grant insert (
   user_id,
   image_url,
-  image_path,
   caption,
   category,
   project_stage,

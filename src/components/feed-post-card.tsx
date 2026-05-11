@@ -75,6 +75,14 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
                 {designerName(post)}
               </p>
             )}
+            {post.designer?.username ? (
+              <Link
+                href={`/designer/${post.designer.username}`}
+                className="mt-2 block text-sm font-bold text-[#7c3138] transition hover:text-[#123c2c]"
+              >
+                @{post.designer.username}
+              </Link>
+            ) : null}
             <p className="mt-2 text-sm font-semibold text-[#6f6252]">
               {designerTitle(post)}
             </p>

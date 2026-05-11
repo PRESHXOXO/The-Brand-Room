@@ -68,3 +68,17 @@ npm run dev
 ```
 
 Then open `http://localhost:3000`.
+
+## Supabase Waitlist
+
+Create the waitlist table by running `supabase/schema.sql` in the Supabase SQL editor.
+
+Add these environment variables in Vercel:
+
+```bash
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+SUPABASE_WAITLIST_TABLE=waitlist_signups
+```
+
+The service role key is used only from the server API route. Do not expose it as a `NEXT_PUBLIC_` variable.

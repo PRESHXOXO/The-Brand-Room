@@ -2,6 +2,7 @@ import { BriefCard } from "@/components/brief-card";
 import { CtaButton } from "@/components/cta-button";
 import { FeatureCard } from "@/components/feature-card";
 import { SectionHeading } from "@/components/section-heading";
+import { WaitlistForm } from "@/components/waitlist-form";
 import { WorkCard } from "@/components/work-card";
 import {
   conceptStrip,
@@ -161,25 +162,21 @@ export default function Home() {
       </section>
 
       <section id="waitlist" className="px-6 py-24 sm:py-28 lg:px-8">
-        <div className="mx-auto max-w-4xl text-center">
-          <p className="mb-5 text-xs font-bold uppercase text-[#7c3138]">
-            Founding designer waitlist
-          </p>
-          <h2 className="font-serif text-5xl leading-none sm:text-6xl lg:text-7xl">
-            Join the first room of designers building better brands in public.
-          </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#554b3f]">
-            Early members will help shape the weekly briefs, critique culture,
-            and featured work standards before the platform opens wider.
-          </p>
-          <div className="mt-10">
-            <CtaButton
-              href="mailto:hello@thebrandroom.studio?subject=The%20Brand%20Room%20Waitlist"
-              variant="dark"
-            >
-              Join the founding designer waitlist
-            </CtaButton>
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+          <div>
+            <p className="mb-5 text-xs font-bold uppercase text-[#7c3138]">
+              Founding designer waitlist
+            </p>
+            <h2 className="font-serif text-5xl leading-none sm:text-6xl lg:text-7xl">
+              Join the first room of designers building better brands in public.
+            </h2>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#554b3f]">
+              Early members will help shape the weekly briefs, critique culture,
+              and featured work standards before the platform opens wider.
+            </p>
           </div>
+
+          <WaitlistForm />
         </div>
       </section>
 

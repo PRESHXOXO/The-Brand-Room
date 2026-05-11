@@ -1,7 +1,7 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
-import { getSupabaseBrowserClient } from "@/lib/supabase";
+import { getSupabasePublicClient } from "@/lib/supabase";
 
 const roles = [
   "Brand designer",
@@ -118,7 +118,7 @@ export function WaitlistForm() {
     }
 
     try {
-      const supabase = getSupabaseBrowserClient();
+      const supabase = getSupabasePublicClient();
       const { error } = await supabase.from("waitlist_signups").insert({
         name,
         email,

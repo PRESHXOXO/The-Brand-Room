@@ -69,9 +69,9 @@ npm run dev
 
 Then open `http://localhost:3000`.
 
-## Supabase Waitlist
+## Supabase Setup
 
-Create or update the waitlist table by running `supabase/schema.sql` in the Supabase SQL editor. Run it again if Supabase rejects signups because it also adds the anon insert policy, email uniqueness, and an auto-generated UUID default for `id`.
+Create or update the waitlist and designer profile tables by running `supabase/schema.sql` in the Supabase SQL editor. Run it again if Supabase rejects signups because it also adds the Row Level Security policies, uniqueness rules, and default timestamps.
 
 Add these environment variables in Vercel:
 
@@ -80,4 +80,13 @@ NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-The waitlist form uses the public anon key with Supabase Row Level Security. Do not add a service role key to the frontend.
+Add the same variables to a local `.env.local` file when developing locally.
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
+In Supabase, keep Email enabled under Authentication providers. If email confirmations are enabled, set the Supabase Auth site URL to your deployed site and add `http://localhost:3000/profile/create` plus your Vercel `/profile/create` URL as redirect URLs.
+
+The waitlist form, email/password auth, and profile editor use the public anon key with Supabase Row Level Security. Do not add a service role key to the frontend.

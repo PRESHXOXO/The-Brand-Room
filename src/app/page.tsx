@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BriefCard } from "@/components/brief-card";
 import { CtaButton } from "@/components/cta-button";
 import { FeatureCard } from "@/components/feature-card";
@@ -254,9 +255,21 @@ export default function Home() {
       </section>
 
       <footer className="border-t border-[#d9c9b3] px-6 py-8 text-sm text-[#554b3f] lg:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-serif text-2xl text-[#0d0b08]">The Brand Room</p>
-          <p>Where designers build better brands in public.</p>
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p className="font-serif text-2xl text-[#0d0b08]">
+              The Brand Room
+            </p>
+            <p className="mt-1">Where designers build better brands in public.</p>
+          </div>
+          <div className="flex flex-wrap gap-4 font-semibold text-[#123c2c]">
+            <Link href="/signup" className="transition hover:text-[#0d0b08]">
+              Create designer profile
+            </Link>
+            <Link href="/login" className="transition hover:text-[#0d0b08]">
+              Log in
+            </Link>
+          </div>
         </div>
       </footer>
     </main>

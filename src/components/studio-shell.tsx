@@ -24,6 +24,12 @@ export function StudioShell({
             The Brand Room
           </Link>
           <nav className="flex items-center gap-4 text-sm font-semibold text-[#554b3f]">
+            <Link href="/feed" className="transition hover:text-[#123c2c]">
+              Feed
+            </Link>
+            <Link href="/post/new" className="transition hover:text-[#123c2c]">
+              Post
+            </Link>
             <Link href="/login" className="transition hover:text-[#123c2c]">
               Log in
             </Link>

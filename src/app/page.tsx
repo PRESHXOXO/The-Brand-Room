@@ -263,6 +263,12 @@ export default function Home() {
             <p className="mt-1">Where designers build better brands in public.</p>
           </div>
           <div className="flex flex-wrap gap-4 font-semibold text-[#123c2c]">
+            <Link href="/feed" className="transition hover:text-[#0d0b08]">
+              View feed
+            </Link>
+            <Link href="/post/new" className="transition hover:text-[#0d0b08]">
+              Publish a post
+            </Link>
             <Link href="/signup" className="transition hover:text-[#0d0b08]">
               Create designer profile
             </Link>

@@ -163,6 +163,173 @@ begin
   end if;
 end $$;
 
+create table if not exists public.posts (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references public.profiles(id) on delete cascade,
+  image_url text,
+  image_path text,
+  caption text,
+  category text,
+  project_stage text,
+  tags text[] default '{}'::text[],
+  created_at timestamp with time zone default now(),
+  updated_at timestamp with time zone default now()
+);
+
+alter table public.posts
+  add column if not exists id uuid default gen_random_uuid();
+
+alter table public.posts
+  add column if not exists user_id uuid;
+
+alter table public.posts
+  add column if not exists image_url text;
+
+alter table public.posts
+  add column if not exists image_path text;
+
+alter table public.posts
+  add column if not exists caption text;
+
+alter table public.posts
+  add column if not exists category text;
+
+alter table public.posts
+  add column if not exists project_stage text;
+
+alter table public.posts
+  add column if not exists tags text[] default '{}'::text[];
+
+alter table public.posts
+  add column if not exists created_at timestamp with time zone default now();
+
+alter table public.posts
+  add column if not exists updated_at timestamp with time zone default now();
+
+alter table public.posts
+  alter column id set default gen_random_uuid();
+
+alter table public.posts
+  alter column tags set default '{}'::text[];
+
+alter table public.posts
+  alter column created_at set default now();
+
+alter table public.posts
+  alter column updated_at set default now();
+
+create index if not exists posts_created_at_idx
+  on public.posts (created_at desc);
+
+create index if not exists posts_user_id_idx
+  on public.posts (user_id);
+
+drop trigger if exists posts_set_updated_at on public.posts;
+
+create trigger posts_set_updated_at
+  before update on public.posts
+  for each row
+  execute function public.set_updated_at();
+
+alter table public.posts enable row level security;
+
+grant usage on schema public to anon, authenticated;
+grant select on public.posts to anon, authenticated;
+grant insert (
+  user_id,
+  image_url,
+  image_path,
+  caption,
+  category,
+  project_stage,
+  tags
+) on public.posts to authenticated;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_policies
+    where schemaname = 'public'
+      and tablename = 'posts'
+      and policyname = 'Public posts are viewable'
+  ) then
+    create policy "Public posts are viewable"
+      on public.posts
+      for select
+      to anon, authenticated
+      using (true);
+  end if;
+
+  if not exists (
+    select 1
+    from pg_policies
+    where schemaname = 'public'
+      and tablename = 'posts'
+      and policyname = 'Users can create their own posts'
+  ) then
+    create policy "Users can create their own posts"
+      on public.posts
+      for insert
+      to authenticated
+      with check (auth.uid() = user_id);
+  end if;
+end $$;
+
+insert into storage.buckets (
+  id,
+  name,
+  public,
+  file_size_limit,
+  allowed_mime_types
+)
+values (
+  'post-images',
+  'post-images',
+  true,
+  10485760,
+  array['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+)
+on conflict (id) do update
+set
+  public = true,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_policies
+    where schemaname = 'storage'
+      and tablename = 'objects'
+      and policyname = 'Public post images are viewable'
+  ) then
+    create policy "Public post images are viewable"
+      on storage.objects
+      for select
+      to anon, authenticated
+      using (bucket_id = 'post-images');
+  end if;
+
+  if not exists (
+    select 1
+    from pg_policies
+    where schemaname = 'storage'
+      and tablename = 'objects'
+      and policyname = 'Users can upload their own post images'
+  ) then
+    create policy "Users can upload their own post images"
+      on storage.objects
+      for insert
+      to authenticated
+      with check (
+        bucket_id = 'post-images'
+        and (storage.foldername(name))[1] = (select auth.uid()::text)
+      );
+  end if;
+end $$;
+
 grant usage on schema public to anon;
 grant insert (
   name,

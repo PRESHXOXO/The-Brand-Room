@@ -39,17 +39,15 @@ body {
   color: var(--black);
 }
 
-.hero-editorial-bg {
-  background:
-    linear-gradient(90deg, rgba(13, 11, 8, 0.92) 0%, rgba(13, 11, 8, 0.74) 42%, rgba(13, 11, 8, 0.42) 100%),
-    linear-gradient(135deg, #11100e 0%, #342722 34%, #b38b59 34%, #b38b59 42%, #f0e2cc 42%, #f0e2cc 63%, #263329 63%, #263329 100%);
-}
-
-.editorial-grid {
+.brand-hero {
+  background-color: var(--black);
   background-image:
-    linear-gradient(rgba(247, 240, 229, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(247, 240, 229, 0.08) 1px, transparent 1px);
-  background-size: 42px 42px;
+    linear-gradient(rgba(247, 240, 229, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247, 240, 229, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13, 11, 8, 0.98) 0%, rgba(13, 11, 8, 0.9) 42%, rgba(13, 11, 8, 0.46) 100%),
+    linear-gradient(135deg, #11100e 0%, #342722 32%, #b38b59 32%, #b38b59 42%, #f0e2cc 42%, #f0e2cc 62%, #263329 62%, #263329 100%);
+  background-size: 42px 42px, 42px 42px, cover, cover;
+  background-position: center;
 }
 
 .image-block-rose {

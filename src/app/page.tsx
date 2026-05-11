@@ -13,15 +13,16 @@ import {
 export default function Home() {
   return (
     <main className="bg-[#f7f0e5] text-[#0d0b08]">
-      <section className="hero-editorial-bg editorial-grid relative min-h-[760px] overflow-hidden text-[#f7f0e5]">
-        <div className="absolute inset-0 opacity-80" aria-hidden="true">
-          <div className="absolute right-[7%] top-24 h-56 w-40 rounded-lg border border-[#f7f0e5]/25 bg-[#f7f0e5]/12 backdrop-blur-sm" />
-          <div className="absolute bottom-28 right-[18%] h-64 w-72 rounded-lg border border-[#f7f0e5]/25 image-block-brass" />
-          <div className="absolute right-[35%] top-44 h-24 w-44 rounded-lg border border-[#f7f0e5]/20 bg-[#7c3138]/75" />
+      <section className="brand-hero relative min-h-[clamp(640px,82svh,760px)] overflow-hidden text-[#f7f0e5]">
+        <div className="absolute inset-0" aria-hidden="true">
+          <div className="absolute right-[8%] top-24 hidden h-52 w-40 rounded-lg border border-[#f7f0e5]/25 bg-[#f7f0e5]/10 backdrop-blur-sm md:block" />
+          <div className="image-block-brass absolute bottom-20 right-[9%] hidden h-72 w-[24rem] rounded-lg border border-[#f7f0e5]/25 shadow-2xl shadow-black/35 md:block" />
+          <div className="absolute right-[32%] top-40 hidden h-24 w-44 rounded-lg border border-[#f7f0e5]/20 bg-[#7c3138]/80 shadow-xl shadow-black/25 lg:block" />
+          <div className="absolute bottom-36 right-[35%] hidden h-px w-36 bg-[#d5bd91]/70 lg:block" />
         </div>
 
-        <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-7 lg:px-8">
-          <a href="#" className="font-serif text-2xl leading-none">
+        <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-6 lg:px-8">
+          <a href="#" className="font-serif text-2xl leading-none text-[#f7f0e5]">
             The Brand Room
           </a>
           <nav className="hidden items-center gap-8 text-sm text-[#e7dcc9] md:flex">
@@ -37,13 +38,13 @@ export default function Home() {
           </nav>
         </header>
 
-        <div className="relative z-10 mx-auto flex min-h-[610px] max-w-7xl items-center px-6 pb-16 pt-10 lg:px-8">
-          <div className="max-w-4xl">
-            <p className="mb-6 max-w-xl text-sm font-bold uppercase text-[#d5bd91]">
+        <div className="relative z-10 mx-auto flex max-w-7xl px-6 pb-20 pt-16 lg:px-8 lg:pb-24 lg:pt-20">
+          <div className="max-w-3xl">
+            <p className="mb-5 max-w-xl text-sm font-bold uppercase text-[#d5bd91]">
               A social studio for brand designers, graphic designers, and
               creative directors in training.
             </p>
-            <h1 className="font-serif text-6xl leading-none sm:text-7xl lg:text-8xl">
+            <h1 className="font-serif text-6xl leading-[0.88] text-[#f7f0e5] sm:text-7xl lg:text-8xl">
               The Brand Room
             </h1>
             <p className="mt-7 max-w-2xl text-xl leading-8 text-[#eadfce] sm:text-2xl sm:leading-9">

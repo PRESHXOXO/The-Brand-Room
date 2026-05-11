@@ -1,6 +1,7 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
+import { getSupabaseBrowserClient } from "@/lib/supabase";
 
 const roles = [
   "Brand designer",
@@ -13,9 +14,33 @@ const roles = [
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
-type WaitlistResponse = {
-  message?: string;
-};
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function cleanText(value: FormDataEntryValue | null) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function normalizeLink(value: string) {
+  const trimmed = value.trim();
+
+  if (!trimmed) {
+    return "";
+  }
+
+  if (trimmed.startsWith("@")) {
+    return `https://instagram.com/${trimmed.slice(1)}`;
+  }
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+
+  if (trimmed.includes(".") || trimmed.includes("/")) {
+    return `https://${trimmed}`;
+  }
+
+  return `https://instagram.com/${trimmed.replace(/^@/, "")}`;
+}
 
 export function WaitlistForm() {
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -28,37 +53,72 @@ export function WaitlistForm() {
 
     const form = event.currentTarget;
     const formData = new FormData(form);
+    const name = cleanText(formData.get("name"));
+    const email = cleanText(formData.get("email")).toLowerCase();
+    const designerRole = cleanText(formData.get("designerRole"));
+    const instagramPortfolioLink = normalizeLink(
+      cleanText(formData.get("instagramPortfolioLink")),
+    );
+
+    if (!name) {
+      setStatus("error");
+      setMessage("Add your name before joining the waitlist.");
+      return;
+    }
+
+    if (!email) {
+      setStatus("error");
+      setMessage("Add your email before joining the waitlist.");
+      return;
+    }
+
+    if (!emailPattern.test(email)) {
+      setStatus("error");
+      setMessage("Use a valid email address.");
+      return;
+    }
 
     try {
-      const response = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.get("name"),
-          email: formData.get("email"),
-          designerRole: formData.get("designerRole"),
-          instagramPortfolioLink: formData.get("instagramPortfolioLink"),
-        }),
+      const supabase = getSupabaseBrowserClient();
+      const { error } = await supabase.from("waitlist_signups").insert({
+        name,
+        email,
+        designer_role: designerRole,
+        instagram_portfolio_link: instagramPortfolioLink,
+        source: "landing_page",
       });
 
-      const result = (await response.json()) as WaitlistResponse;
-      const responseMessage =
-        result.message || "Something went wrong. Try again in a moment.";
+      if (error) {
+        const duplicateEmail =
+          error.code === "23505" ||
+          error.message.toLowerCase().includes("duplicate");
 
-      if (!response.ok) {
         setStatus("error");
-        setMessage(responseMessage);
+        setMessage(
+          duplicateEmail
+            ? "That email is already on the list. You are good to go."
+            : "The waitlist could not save your details. Check your info and try again.",
+        );
         return;
       }
 
       setStatus("success");
-      setMessage(responseMessage);
+      setMessage("You’re on the list. Welcome to The Brand Room.");
       form.reset();
-    } catch {
+    } catch (error) {
+      const message =
+        error instanceof Error && error.message.includes("Supabase")
+          ? error.message
+          : "Could not submit the form. Try again in a moment.";
+
       setStatus("error");
-      setMessage("Could not submit the form. Try again in a moment.");
+      setMessage(message);
+    } finally {
+      if (status !== "success") {
+        setStatus((currentStatus) =>
+          currentStatus === "submitting" ? "idle" : currentStatus,
+        );
+      }
     }
   }
 

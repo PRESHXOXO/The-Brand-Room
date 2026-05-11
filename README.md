@@ -76,9 +76,8 @@ Create the waitlist table by running `supabase/schema.sql` in the Supabase SQL e
 Add these environment variables in Vercel:
 
 ```bash
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-SUPABASE_WAITLIST_TABLE=waitlist_signups
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-The service role key is used only from the server API route. Do not expose it as a `NEXT_PUBLIC_` variable.
+The waitlist form uses the public anon key with Supabase Row Level Security. Do not add a service role key to the frontend.

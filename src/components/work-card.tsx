@@ -20,7 +20,7 @@ export function WorkCard({ work }: WorkCardProps) {
       />
       <div className="flex items-end justify-between gap-4 p-5">
         <div>
-          <p className="text-xs font-bold uppercase text-[#7c3138]">
+          <p className="text-xs font-bold uppercase text-[#123c2c]">
             {work.label}
           </p>
           <h3 className="mt-2 text-lg font-semibold text-[#0d0b08]">

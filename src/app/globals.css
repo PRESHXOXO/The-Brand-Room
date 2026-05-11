@@ -8,6 +8,7 @@
   --taupe: #9d8f7a;
   --brass: #b38b59;
   --oxblood: #7c3138;
+  --hunter: #123c2c;
   --moss: #63715d;
   --powder: #cad4d8;
 }
@@ -44,8 +45,8 @@ body {
   background-image:
     linear-gradient(rgba(247, 240, 229, 0.07) 1px, transparent 1px),
     linear-gradient(90deg, rgba(247, 240, 229, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(13, 11, 8, 0.98) 0%, rgba(13, 11, 8, 0.9) 42%, rgba(13, 11, 8, 0.46) 100%),
-    linear-gradient(135deg, #11100e 0%, #342722 32%, #b38b59 32%, #b38b59 42%, #f0e2cc 42%, #f0e2cc 62%, #263329 62%, #263329 100%);
+    linear-gradient(90deg, rgba(13, 11, 8, 0.98) 0%, rgba(13, 11, 8, 0.91) 42%, rgba(13, 11, 8, 0.56) 100%),
+    linear-gradient(135deg, #11100e 0%, #342722 32%, #b38b59 32%, #b38b59 41%, #f0e2cc 41%, #f0e2cc 61%, #123c2c 61%, #123c2c 100%);
   background-size: 42px 42px, 42px 42px, cover, cover;
   background-position: center;
 }
@@ -55,7 +56,7 @@ body {
 }
 
 .image-block-moss {
-  background: linear-gradient(135deg, #1d261d 0%, #63715d 48%, #d9d0bd 100%);
+  background: linear-gradient(135deg, #0c1f17 0%, #123c2c 48%, #d9d0bd 100%);
 }
 
 .image-block-brass {

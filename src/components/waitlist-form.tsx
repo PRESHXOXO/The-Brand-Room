@@ -141,7 +141,7 @@ export function WaitlistForm() {
             minLength={2}
             maxLength={120}
             autoComplete="name"
-            className="mt-2 w-full rounded-md border border-[#d6c5ad] bg-[#fffaf2] px-4 py-3 text-sm text-[#0d0b08] outline-none transition placeholder:text-[#9d8f7a] focus:border-[#7c3138]"
+            className="mt-2 w-full rounded-md border border-[#d6c5ad] bg-[#fffaf2] px-4 py-3 text-sm text-[#0d0b08] outline-none transition placeholder:text-[#9d8f7a] focus:border-[#123c2c]"
             placeholder="Your name"
           />
         </label>
@@ -156,7 +156,7 @@ export function WaitlistForm() {
             required
             maxLength={180}
             autoComplete="email"
-            className="mt-2 w-full rounded-md border border-[#d6c5ad] bg-[#fffaf2] px-4 py-3 text-sm text-[#0d0b08] outline-none transition placeholder:text-[#9d8f7a] focus:border-[#7c3138]"
+            className="mt-2 w-full rounded-md border border-[#d6c5ad] bg-[#fffaf2] px-4 py-3 text-sm text-[#0d0b08] outline-none transition placeholder:text-[#9d8f7a] focus:border-[#123c2c]"
             placeholder="you@example.com"
           />
         </label>
@@ -169,7 +169,7 @@ export function WaitlistForm() {
             name="designerRole"
             required
             defaultValue=""
-            className="mt-2 w-full rounded-md border border-[#d6c5ad] bg-[#fffaf2] px-4 py-3 text-sm text-[#0d0b08] outline-none transition focus:border-[#7c3138]"
+            className="mt-2 w-full rounded-md border border-[#d6c5ad] bg-[#fffaf2] px-4 py-3 text-sm text-[#0d0b08] outline-none transition focus:border-[#123c2c]"
           >
             <option value="" disabled>
               Select your role
@@ -192,7 +192,7 @@ export function WaitlistForm() {
             required
             maxLength={300}
             autoComplete="url"
-            className="mt-2 w-full rounded-md border border-[#d6c5ad] bg-[#fffaf2] px-4 py-3 text-sm text-[#0d0b08] outline-none transition placeholder:text-[#9d8f7a] focus:border-[#7c3138]"
+            className="mt-2 w-full rounded-md border border-[#d6c5ad] bg-[#fffaf2] px-4 py-3 text-sm text-[#0d0b08] outline-none transition placeholder:text-[#9d8f7a] focus:border-[#123c2c]"
             placeholder="@designer or portfolio.com"
           />
         </label>
@@ -202,9 +202,9 @@ export function WaitlistForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex min-h-12 items-center justify-center rounded-md border border-[#0d0b08] bg-[#0d0b08] px-6 py-3 text-sm font-semibold text-[#f7f0e5] transition hover:bg-[#2a2118] disabled:cursor-not-allowed disabled:opacity-65"
+          className="inline-flex min-h-12 items-center justify-center rounded-md border border-[#0d0b08] bg-[#0d0b08] px-6 py-3 text-sm font-semibold text-[#f7f0e5] transition hover:border-[#123c2c] hover:bg-[#123c2c] disabled:cursor-not-allowed disabled:opacity-65"
         >
-          {isSubmitting ? "Joining..." : "Join the waitlist"}
+          {isSubmitting ? "Joining..." : "Join the Founding Waitlist"}
           <span aria-hidden="true" className="ml-3">
             -&gt;
           </span>

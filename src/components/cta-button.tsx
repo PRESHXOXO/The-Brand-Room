@@ -9,11 +9,11 @@ type CtaButtonProps = {
 
 const variants = {
   light:
-    "border-[#f7f0e5] bg-[#f7f0e5] text-[#0d0b08] hover:bg-[#e7dcc9]",
+    "border-[#f7f0e5] bg-[#f7f0e5] text-[#0d0b08] hover:border-[#123c2c] hover:bg-[#123c2c] hover:text-[#f7f0e5]",
   dark:
-    "border-[#0d0b08] bg-[#0d0b08] text-[#f7f0e5] hover:bg-[#2a2118]",
+    "border-[#0d0b08] bg-[#0d0b08] text-[#f7f0e5] hover:border-[#123c2c] hover:bg-[#123c2c]",
   outline:
-    "border-[#f7f0e5]/70 bg-[#f7f0e5]/5 text-[#f7f0e5] hover:bg-[#f7f0e5]/15",
+    "border-[#f7f0e5]/70 bg-[#f7f0e5]/5 text-[#f7f0e5] hover:border-[#a5c0a5] hover:bg-[#123c2c]/70",
 };
 
 export function CtaButton({

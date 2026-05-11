@@ -19,11 +19,43 @@ export type WorkPreview = {
   tone: "rose" | "moss" | "brass" | "powder" | "ink";
 };
 
-export const conceptStrip = [
-  "Weekly design briefs",
-  "Designer profiles",
-  "Feedback threads",
-  "Featured work",
+export type ConceptItem = {
+  tag: string;
+  label: string;
+};
+
+export type HeroPreviewCard = {
+  tag: string;
+  label: string;
+  title: string;
+  detail: string;
+  meta: string;
+};
+
+export type ProcessStep = {
+  number: string;
+  tag: string;
+  title: string;
+  description: string;
+};
+
+export const conceptStrip: ConceptItem[] = [
+  {
+    tag: "BRIEF DROP",
+    label: "Weekly design briefs",
+  },
+  {
+    tag: "TASTE STUDY",
+    label: "Designer profiles",
+  },
+  {
+    tag: "CRITIQUE ROOM",
+    label: "Feedback threads",
+  },
+  {
+    tag: "FEATURED WORK",
+    label: "Featured work",
+  },
 ];
 
 export const insideFeatures: Feature[] = [
@@ -61,6 +93,75 @@ export const insideFeatures: Feature[] = [
       "Find peers with a point of view, watch their process, and study how strong creative decisions are made.",
     kicker: "Directory",
     tone: "ink",
+  },
+];
+
+export const heroPreviewCards: HeroPreviewCard[] = [
+  {
+    tag: "BRIEF DROP",
+    label: "Weekly Brief",
+    title: "Beverly Hills fruit-filled donut shop",
+    detail: "Identity prompt · packaging system · launch poster",
+    meta: "Week 07",
+  },
+  {
+    tag: "TASTE STUDY",
+    label: "Typography Study",
+    title: "Serif rhythm and luxury spacing",
+    detail: "Type pairing notes, lockups, and hierarchy passes",
+    meta: "12 saves",
+  },
+  {
+    tag: "CRITIQUE ROOM",
+    label: "Critique Request",
+    title: "Which direction feels more ownable?",
+    detail: "Three comments on strategy, palette, and mark clarity",
+    meta: "Open",
+  },
+  {
+    tag: "FEATURED WORK",
+    label: "Featured Designer",
+    title: "Maya Chen · Hotel tabletop suite",
+    detail: "Monogram, stationery, key card, and case-study polish",
+    meta: "Featured",
+  },
+];
+
+export const processSteps: ProcessStep[] = [
+  {
+    number: "01",
+    tag: "BRIEF DROP",
+    title: "Get the Brief",
+    description:
+      "Start with a weekly prompt shaped around brand strategy, visual direction, and polished deliverables.",
+  },
+  {
+    number: "02",
+    tag: "TASTE STUDY",
+    title: "Build in Public",
+    description:
+      "Post messy rounds, references, typography tests, and early systems while your concept is still forming.",
+  },
+  {
+    number: "03",
+    tag: "CRITIQUE ROOM",
+    title: "Request Critique",
+    description:
+      "Ask for feedback on what matters: positioning, taste level, clarity, hierarchy, and creative direction.",
+  },
+  {
+    number: "04",
+    tag: "CASE STUDY",
+    title: "Polish the Case Study",
+    description:
+      "Refine the strongest route into a portfolio-ready story with process, logic, and final brand assets.",
+  },
+  {
+    number: "05",
+    tag: "FEATURED WORK",
+    title: "Get Featured",
+    description:
+      "Standout work earns visibility in the room so other designers can study the decisions behind it.",
   },
 ];
 

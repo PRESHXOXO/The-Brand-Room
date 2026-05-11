@@ -8,7 +8,7 @@ export function BriefCard({ brief }: BriefCardProps) {
   return (
     <article className="flex h-full flex-col rounded-lg border border-[#e0d2bd] bg-[#f9f3e9] p-6">
       <div className="flex items-start justify-between gap-5">
-        <p className="text-xs font-bold uppercase text-[#7c3138]">
+        <p className="text-xs font-bold uppercase text-[#123c2c]">
           {brief.category}
         </p>
         <div className="flex gap-1.5" aria-hidden="true">

@@ -141,3 +141,9 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Local project tooling and generated files
+.tools/
+dev-server*.log
+verification-*.png
+next-env.d.ts

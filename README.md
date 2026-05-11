@@ -59,3 +59,12 @@ Preferred:
 - Tailwind CSS
 - Supabase later for auth, database, and image storage
 - Vercel for deployment
+
+## Run Locally
+
+```bash
+npm install
+npm run dev
+```
+
+Then open `http://localhost:3000`.

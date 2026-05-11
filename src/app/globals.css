@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  --black: #0d0b08;
+  --charcoal: #17130f;
+  --ivory: #f7f0e5;
+  --bone: #e7dcc9;
+  --taupe: #9d8f7a;
+  --brass: #b38b59;
+  --oxblood: #7c3138;
+  --moss: #63715d;
+  --powder: #cad4d8;
+}
+
+@theme {
+  --font-sans: "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Bodoni 72", "Didot", "Cormorant Garamond", Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+  letter-spacing: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--ivory);
+  color: var(--black);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--brass);
+  color: var(--black);
+}
+
+.hero-editorial-bg {
+  background:
+    linear-gradient(90deg, rgba(13, 11, 8, 0.92) 0%, rgba(13, 11, 8, 0.74) 42%, rgba(13, 11, 8, 0.42) 100%),
+    linear-gradient(135deg, #11100e 0%, #342722 34%, #b38b59 34%, #b38b59 42%, #f0e2cc 42%, #f0e2cc 63%, #263329 63%, #263329 100%);
+}
+
+.editorial-grid {
+  background-image:
+    linear-gradient(rgba(247, 240, 229, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247, 240, 229, 0.08) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+.image-block-rose {
+  background: linear-gradient(135deg, #391719 0%, #7c3138 42%, #e7dcc9 100%);
+}
+
+.image-block-moss {
+  background: linear-gradient(135deg, #1d261d 0%, #63715d 48%, #d9d0bd 100%);
+}
+
+.image-block-brass {
+  background: linear-gradient(135deg, #0d0b08 0%, #b38b59 52%, #f7f0e5 100%);
+}
+
+.image-block-powder {
+  background: linear-gradient(135deg, #20252a 0%, #cad4d8 48%, #8b6b50 100%);
+}
+
+.image-block-ink {
+  background:
+    linear-gradient(135deg, rgba(13, 11, 8, 0.1), rgba(13, 11, 8, 0.9)),
+    repeating-linear-gradient(90deg, #f7f0e5 0 18px, #17130f 18px 20px);
+}

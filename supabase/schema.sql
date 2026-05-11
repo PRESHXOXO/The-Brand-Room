@@ -9,6 +9,12 @@ create table if not exists public.waitlist_signups (
   source text not null default 'landing_page'
 );
 
+alter table public.waitlist_signups
+  alter column id set default gen_random_uuid();
+
+alter table public.waitlist_signups
+  alter column source set default 'landing_page';
+
 alter table public.waitlist_signups enable row level security;
 
 do $$
@@ -26,7 +32,14 @@ begin
   end if;
 end $$;
 
-grant insert on public.waitlist_signups to anon;
+grant usage on schema public to anon;
+grant insert (
+  name,
+  email,
+  designer_role,
+  instagram_portfolio_link,
+  source
+) on public.waitlist_signups to anon;
 
 do $$
 begin

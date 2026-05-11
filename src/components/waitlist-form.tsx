@@ -16,6 +16,11 @@ type FormStatus = "idle" | "submitting" | "success" | "error";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+type SupabaseInsertError = {
+  code?: string;
+  message: string;
+};
+
 function cleanText(value: FormDataEntryValue | null) {
   return typeof value === "string" ? value.trim() : "";
 }
@@ -40,6 +45,40 @@ function normalizeLink(value: string) {
   }
 
   return `https://instagram.com/${trimmed.replace(/^@/, "")}`;
+}
+
+function getWaitlistErrorMessage(error: SupabaseInsertError) {
+  const message = error.message.toLowerCase();
+
+  if (error.code === "23505" || message.includes("duplicate")) {
+    return "That email is already on the list. You are good to go.";
+  }
+
+  if (message.includes("row-level security") || message.includes("rls")) {
+    return "Supabase rejected this signup. Run the waitlist SQL policy in Supabase, then try again.";
+  }
+
+  if (message.includes("permission denied")) {
+    return "Supabase needs anon insert permission for the waitlist table. Run the waitlist SQL setup again.";
+  }
+
+  if (message.includes("null value") && message.includes("id")) {
+    return "The waitlist table needs an auto-generated UUID id. Run the updated waitlist SQL setup.";
+  }
+
+  if (message.includes("relation") && message.includes("does not exist")) {
+    return "Supabase cannot find the waitlist_signups table. Check the table name and schema.";
+  }
+
+  if (message.includes("column") && message.includes("does not exist")) {
+    return "The waitlist table columns do not match the form yet. Check the waitlist_signups columns in Supabase.";
+  }
+
+  if (message.includes("failed to fetch") || message.includes("invalid")) {
+    return "Supabase could not be reached. Check the public Supabase URL and anon key in Vercel.";
+  }
+
+  return "The waitlist could not save your details. Check your info and try again.";
 }
 
 export function WaitlistForm() {
@@ -89,16 +128,9 @@ export function WaitlistForm() {
       });
 
       if (error) {
-        const duplicateEmail =
-          error.code === "23505" ||
-          error.message.toLowerCase().includes("duplicate");
-
+        console.error("Supabase waitlist insert failed", error);
         setStatus("error");
-        setMessage(
-          duplicateEmail
-            ? "That email is already on the list. You are good to go."
-            : "The waitlist could not save your details. Check your info and try again.",
-        );
+        setMessage(getWaitlistErrorMessage(error));
         return;
       }
 
@@ -167,7 +199,6 @@ export function WaitlistForm() {
           </span>
           <select
             name="designerRole"
-            required
             defaultValue=""
             className="mt-2 w-full rounded-md border border-[#d6c5ad] bg-[#fffaf2] px-4 py-3 text-sm text-[#0d0b08] outline-none transition focus:border-[#123c2c]"
           >
@@ -189,7 +220,6 @@ export function WaitlistForm() {
           <input
             name="instagramPortfolioLink"
             type="text"
-            required
             maxLength={300}
             autoComplete="url"
             className="mt-2 w-full rounded-md border border-[#d6c5ad] bg-[#fffaf2] px-4 py-3 text-sm text-[#0d0b08] outline-none transition placeholder:text-[#9d8f7a] focus:border-[#123c2c]"

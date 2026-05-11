@@ -71,7 +71,7 @@ Then open `http://localhost:3000`.
 
 ## Supabase Waitlist
 
-Create the waitlist table by running `supabase/schema.sql` in the Supabase SQL editor.
+Create or update the waitlist table by running `supabase/schema.sql` in the Supabase SQL editor. Run it again if Supabase rejects signups because it also adds the anon insert policy, email uniqueness, and an auto-generated UUID default for `id`.
 
 Add these environment variables in Vercel:
 

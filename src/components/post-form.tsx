@@ -34,6 +34,8 @@ type PostFormProps = {
   onPostCreated?: () => void | Promise<void>;
 };
 
+type PostMode = "text" | "photo";
+
 const maxImageBytes = 10 * 1024 * 1024;
 
 function cleanText(value: string) {
@@ -76,6 +78,7 @@ export function PostForm({ onPostCreated }: PostFormProps) {
   const [message, setMessage] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
   const [profile, setProfile] = useState<ActiveProfile | null>(null);
+  const [postMode, setPostMode] = useState<PostMode>("text");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
   const [caption, setCaption] = useState("");
@@ -205,6 +208,20 @@ export function PostForm({ onPostCreated }: PostFormProps) {
     );
   }
 
+  function handlePostModeChange(mode: PostMode) {
+    setPostMode(mode);
+    setMessage("");
+
+    if (mode === "text") {
+      if (imageInputRef.current) {
+        imageInputRef.current.value = "";
+      }
+
+      setImageFile(null);
+      setImagePreview("");
+    }
+  }
+
   function resetForm() {
     if (imageInputRef.current) {
       imageInputRef.current.value = "";
@@ -212,6 +229,7 @@ export function PostForm({ onPostCreated }: PostFormProps) {
 
     setImageFile(null);
     setImagePreview("");
+    setPostMode("text");
     setCaption("");
     setCategory(postCategories[0]);
     setProjectStage(projectStages[0]);
@@ -229,9 +247,9 @@ export function PostForm({ onPostCreated }: PostFormProps) {
       return;
     }
 
-    if (!imageFile) {
+    if (postMode === "photo" && !imageFile) {
       setStatus("error");
-      setMessage("Add an image before publishing your post.");
+      setMessage("Add an image or switch to a text post.");
       return;
     }
 
@@ -244,28 +262,36 @@ export function PostForm({ onPostCreated }: PostFormProps) {
     }
 
     const timestamp = Date.now();
-    const imagePath = `${userId}/${timestamp}-${sanitizeFileName(imageFile.name)}`;
     const tags = parseTags(tagsInput);
+    let publicUrl: string | null = null;
 
     try {
       const supabase = getSupabaseBrowserClient();
-      const { error: uploadError } = await supabase.storage
-        .from("post-images")
-        .upload(imagePath, imageFile, {
-          cacheControl: "3600",
-          contentType: imageFile.type,
-          upsert: false,
-        });
 
-      if (uploadError) {
-        setStatus("error");
-        setMessage(getPostErrorMessage(uploadError));
-        return;
+      if (postMode === "photo" && imageFile) {
+        const imagePath = `${userId}/${timestamp}-${sanitizeFileName(
+          imageFile.name,
+        )}`;
+        const { error: uploadError } = await supabase.storage
+          .from("post-images")
+          .upload(imagePath, imageFile, {
+            cacheControl: "3600",
+            contentType: imageFile.type,
+            upsert: false,
+          });
+
+        if (uploadError) {
+          setStatus("error");
+          setMessage(getPostErrorMessage(uploadError));
+          return;
+        }
+
+        const {
+          data: { publicUrl: uploadedPublicUrl },
+        } = supabase.storage.from("post-images").getPublicUrl(imagePath);
+
+        publicUrl = uploadedPublicUrl;
       }
-
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from("post-images").getPublicUrl(imagePath);
 
       const { error: insertError } = await supabase.from("posts").insert({
         user_id: userId,
@@ -301,13 +327,48 @@ export function PostForm({ onPostCreated }: PostFormProps) {
       onSubmit={handleSubmit}
       className="rounded-lg border border-[#d7c7ae] bg-[#fbf6ee] p-5 shadow-xl shadow-[#0d0b08]/8 sm:p-6"
     >
+      <div className="mb-5 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => handlePostModeChange("text")}
+          className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+            postMode === "text"
+              ? "border-[#7c3138] bg-[#7c3138] text-[#f7f0e5]"
+              : "border-[#d6c5ad] bg-[#fffaf2] text-[#554b3f] hover:border-[#7c3138] hover:text-[#7c3138]"
+          }`}
+        >
+          Text post
+        </button>
+        <button
+          type="button"
+          onClick={() => handlePostModeChange("photo")}
+          className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+            postMode === "photo"
+              ? "border-[#7c3138] bg-[#7c3138] text-[#f7f0e5]"
+              : "border-[#d6c5ad] bg-[#fffaf2] text-[#554b3f] hover:border-[#7c3138] hover:text-[#7c3138]"
+          }`}
+        >
+          Photo post
+        </button>
+      </div>
+
       <div className="grid gap-5 lg:grid-cols-[0.85fr_1.15fr]">
         <label className="block">
           <span className="text-xs font-bold uppercase text-[#6f6252]">
-            Image upload
+            {postMode === "photo" ? "Image upload" : "Post format"}
           </span>
           <div className="mt-2 flex min-h-80 items-center justify-center overflow-hidden rounded-md border border-dashed border-[#bfae94] bg-[#fffaf2]">
-            {imagePreview ? (
+            {postMode === "text" ? (
+              <div className="px-6 text-center">
+                <p className="font-serif text-3xl text-[#0d0b08]">
+                  Write the thought.
+                </p>
+                <p className="mt-3 text-sm leading-6 text-[#6f6252]">
+                  Share a question, creative direction note, positioning
+                  thought, critique request, or behind-the-scenes decision.
+                </p>
+              </div>
+            ) : imagePreview ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={imagePreview}
@@ -331,7 +392,7 @@ export function PostForm({ onPostCreated }: PostFormProps) {
             name="image"
             type="file"
             accept="image/*"
-            disabled={cannotSubmit}
+            disabled={cannotSubmit || postMode !== "photo"}
             onChange={handleImageChange}
             className="mt-3 w-full rounded-md border border-[#d6c5ad] bg-[#fffaf2] px-4 py-3 text-sm text-[#0d0b08] outline-none transition file:mr-4 file:rounded-md file:border-0 file:bg-[#0d0b08] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#f7f0e5] focus:border-[#123c2c] disabled:opacity-60"
           />
@@ -340,7 +401,7 @@ export function PostForm({ onPostCreated }: PostFormProps) {
         <div className="space-y-4">
           <label className="block">
             <span className="text-xs font-bold uppercase text-[#6f6252]">
-              Caption
+              {postMode === "photo" ? "Caption" : "Post text"}
             </span>
             <textarea
               name="caption"
@@ -351,7 +412,11 @@ export function PostForm({ onPostCreated }: PostFormProps) {
               value={caption}
               onChange={(event) => setCaption(event.target.value)}
               className="mt-2 w-full resize-none rounded-md border border-[#d6c5ad] bg-[#fffaf2] px-4 py-3 text-sm leading-6 text-[#0d0b08] outline-none transition placeholder:text-[#9d8f7a] focus:border-[#123c2c] disabled:opacity-60"
-              placeholder="Share the idea, the tension, and what kind of feedback would sharpen it."
+              placeholder={
+                postMode === "photo"
+                  ? "Share the idea, the tension, and what kind of feedback would sharpen it."
+                  : "Write a studio note, design question, critique request, or taste observation."
+              }
             />
           </label>
 

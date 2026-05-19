@@ -22,7 +22,7 @@ export type ProjectStage = (typeof projectStages)[number];
 export type PostRow = {
   id: string;
   user_id: string | null;
-  image_url: string;
+  image_url: string | null;
   caption: string | null;
   category: string | null;
   project_stage: string | null;

@@ -51,8 +51,8 @@ export function FeedExperience() {
         return;
       }
 
-      const postRows = ((postData ?? []) as PostRow[]).filter((post) =>
-        Boolean(post.image_url),
+      const postRows = ((postData ?? []) as PostRow[]).filter(
+        (post) => Boolean(post.image_url) || Boolean(post.caption),
       );
       const profileIds = Array.from(
         new Set(

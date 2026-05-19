@@ -89,6 +89,6 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 In Supabase, keep Email enabled under Authentication providers. If email confirmations are enabled, set the Supabase Auth site URL to your deployed site and add `http://localhost:3000/profile/create` plus your Vercel `/profile/create` URL as redirect URLs.
 
-The Feed at `/feed` is the signed-in home experience. Its inline post composer uploads images to a public Supabase Storage bucket named `post-images`, stores files under `user_id/timestamp-filename`, and writes the public image URL to `public.posts`.
+The Feed at `/feed` is the signed-in home experience. Its inline composer supports text posts and photo posts. Photo posts upload images to a public Supabase Storage bucket named `post-images`, store files under `user_id/timestamp-filename`, and write the public image URL to `public.posts`. Public designer profiles collect each designer's feed posts below their profile details.
 
 The waitlist form, email/password auth, profile editor, post composer, and feed use the public anon key with Supabase Row Level Security. Do not add a service role key to the frontend.

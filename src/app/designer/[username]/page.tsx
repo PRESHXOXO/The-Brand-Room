@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FeedPostCard } from "@/components/feed-post-card";
+import type { FeedPost, PostRow } from "@/lib/posts";
+import { normalizePostTags } from "@/lib/posts";
 import type { DesignerProfile } from "@/lib/profile";
 import { getSupabasePublicClient } from "@/lib/supabase";
 
@@ -47,6 +50,37 @@ async function getProfile(username: string) {
   return data as DesignerProfile;
 }
 
+async function getDesignerPosts(profile: DesignerProfile): Promise<FeedPost[]> {
+  const supabase = getSupabasePublicClient();
+  const { data, error } = await supabase
+    .from("posts")
+    .select(
+      "id, user_id, image_url, caption, category, project_stage, tags, created_at, updated_at",
+    )
+    .eq("user_id", profile.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    return [];
+  }
+
+  const posts = ((data ?? []) as PostRow[]).filter(
+    (post) => Boolean(post.image_url) || Boolean(post.caption),
+  );
+
+  return posts.map((post) => ({
+    ...post,
+    tags: normalizePostTags(post.tags),
+    designer: {
+      id: profile.id,
+      full_name: profile.full_name,
+      username: profile.username,
+      designer_title: profile.designer_title,
+      avatar_url: profile.avatar_url,
+    },
+  }));
+}
+
 export default async function DesignerProfilePage({
   params,
 }: DesignerPageProps) {
@@ -58,6 +92,7 @@ export default async function DesignerProfilePage({
   }
 
   const profileLink = profile.instagram_portfolio_link;
+  const posts = await getDesignerPosts(profile);
 
   return (
     <main className="min-h-screen bg-[#f7f0e5] text-[#0d0b08]">
@@ -165,6 +200,45 @@ export default async function DesignerProfilePage({
               </p>
             )}
           </article>
+        </div>
+      </section>
+
+      <section className="border-t border-[#d9c9b3] px-6 py-16 sm:py-20 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase text-[#7c3138]">
+                Featured work
+              </p>
+              <h2 className="mt-2 font-serif text-4xl leading-none sm:text-5xl">
+                Posts from @{profile.username}
+              </h2>
+            </div>
+            <Link
+              href="/feed"
+              className="text-sm font-semibold text-[#123c2c] underline-offset-4 transition hover:underline"
+            >
+              Back to feed
+            </Link>
+          </div>
+
+          {posts.length > 0 ? (
+            <div className="mt-8 grid gap-6 lg:grid-cols-2">
+              {posts.map((post) => (
+                <FeedPostCard key={post.id} post={post} />
+              ))}
+            </div>
+          ) : (
+            <div className="mt-8 rounded-lg border border-[#d7c7ae] bg-[#fbf6ee] p-8">
+              <p className="font-serif text-4xl leading-none">
+                No public posts yet.
+              </p>
+              <p className="mt-3 text-sm leading-6 text-[#554b3f]">
+                This profile will collect text notes, photo posts, studies, and
+                brand work as they publish to the room.
+              </p>
+            </div>
+          )}
         </div>
       </section>
     </main>

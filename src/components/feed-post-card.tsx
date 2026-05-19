@@ -43,22 +43,41 @@ export function FeedPostCard({ post }: FeedPostCardProps) {
 
   return (
     <article className="overflow-hidden rounded-lg border border-[#d7c7ae] bg-[#fbf6ee] shadow-xl shadow-[#0d0b08]/6">
-      <div className="relative bg-[#0d0b08]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={post.image_url}
-          alt={post.caption ?? "Brand Room post image"}
-          className="aspect-[4/3] w-full object-cover"
-        />
-        <div className="absolute left-4 top-4 flex flex-wrap gap-2">
-          <span className="rounded-full border border-[#a5c0a5]/35 bg-[#123c2c]/90 px-3 py-1 text-[11px] font-bold uppercase text-[#d9ead9]">
-            {post.category ?? "WIP"}
-          </span>
-          <span className="rounded-full border border-[#f7f0e5]/25 bg-[#0d0b08]/75 px-3 py-1 text-[11px] font-bold uppercase text-[#d5bd91]">
-            {post.project_stage ?? "In Progress"}
-          </span>
+      {post.image_url ? (
+        <div className="relative bg-[#0d0b08]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={post.image_url}
+            alt={post.caption ?? "Brand Room post image"}
+            className="aspect-[4/3] w-full object-cover"
+          />
+          <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+            <span className="rounded-full border border-[#a5c0a5]/35 bg-[#123c2c]/90 px-3 py-1 text-[11px] font-bold uppercase text-[#d9ead9]">
+              {post.category ?? "WIP"}
+            </span>
+            <span className="rounded-full border border-[#f7f0e5]/25 bg-[#0d0b08]/75 px-3 py-1 text-[11px] font-bold uppercase text-[#d5bd91]">
+              {post.project_stage ?? "In Progress"}
+            </span>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="border-b border-[#d7c7ae] bg-[#0d0b08] p-6 text-[#f7f0e5]">
+          <div className="flex flex-wrap gap-2">
+            <span className="rounded-full border border-[#7c3138]/60 bg-[#7c3138]/40 px-3 py-1 text-[11px] font-bold uppercase text-[#f0d0d3]">
+              Text post
+            </span>
+            <span className="rounded-full border border-[#a5c0a5]/35 bg-[#123c2c]/90 px-3 py-1 text-[11px] font-bold uppercase text-[#d9ead9]">
+              {post.category ?? "WIP"}
+            </span>
+            <span className="rounded-full border border-[#f7f0e5]/25 bg-[#0d0b08]/75 px-3 py-1 text-[11px] font-bold uppercase text-[#d5bd91]">
+              {post.project_stage ?? "In Progress"}
+            </span>
+          </div>
+          <p className="mt-10 font-serif text-4xl leading-none">
+            Studio note
+          </p>
+        </div>
+      )}
 
       <div className="p-5">
         <div className="flex flex-col gap-3 border-b border-[#d7c7ae] pb-5 sm:flex-row sm:items-start sm:justify-between">
